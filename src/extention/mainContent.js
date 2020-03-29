@@ -73,21 +73,15 @@ const main = () => {
 
             
 
-            socket.emit("identify", uid,stamp => {
-                console.log(stamp);
-                if (stamp != false) {
-                    playOrPause(true, videoPlayer, playButton);
-                    setTimeStamp(timeStamp, videoPlayer);
-                }
-            });
+            socket.emit("identify", uid);
 
 
             socket.on("requestTimeStamp", val => {
                 console.log("I ran"); 
                 console.log(val); 
 
-                if (val)
-                    setTimeStamp(videoPlayer.currentTime-1,videoPlayer);
+                // if (val)
+                //     setTimeStamp(videoPlayer.currentTime-1,videoPlayer);
                
 
             });
