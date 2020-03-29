@@ -1,0 +1,30 @@
+{
+  "name": "hulu-party",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "restart": "rm ./src/extention/js/r.js && browserify -t [ babelify --presets [ react ] ] ./src/extention/js/popup.js -o ./src/extention/js/r.js && rm ./src/extention/content.js &&  browserify ./src/extention/mainContent.js -o ./src/extention/content.js",
+    "start": "browserify -t [ babelify --presets [ react ] ] ./src/extention/js/popup.js -o ./src/extention/js/r.js && browserify ./src/extention/mainContent.js -o ./src/extention/content.js",
+    "startServer": "node ./src/backend/js/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "babel-core": "^6.26.3",
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^8.0.0",
+    "cookie-parser": "^1.4.5",
+    "create-react-class": "^15.6.3",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "uuid": "^7.0.2"
+  }
+}

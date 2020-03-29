@@ -1,0 +1,21 @@
+{
+    "name": "Hulu Party",
+    "description": "Watch Hulu with friends",
+    "version": "0.1",
+    "incognito": "split",
+    "manifest_version": 2,
+    "permissions": [
+        "tabs","storage","activeTab"
+    ],
+    "background": "background.html",
+    "browser_action": {
+        "title": "Your Browser Action Name",
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [{
+        "matches" : ["*://*.hulu.com/watch/*","*://*.dry-brook-72799.herokuapp.com/joinParty/*"],
+        "css": ["style.css"],
+        "js": ["content.js"]
+        
+    }]
+}
