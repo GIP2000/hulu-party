@@ -7010,20 +7010,20 @@ const main = () => {
             if (uid === undefined) return chrome.storage.local.clear(makeParty);
             const socket = io("https://dry-brook-72799.herokuapp.com/hulu-party");
 
-            
-
-            socket.emit("identify", uid);
-
-
             socket.on("requestTimeStamp", val => {
                 console.log("I ran"); 
                 console.log(val); 
 
-                // if (val)
-                //     setTimeStamp(videoPlayer.currentTime-1,videoPlayer);
+                if (val)
+                    setTimeStamp(0,videoPlayer);
                
 
             });
+
+            socket.emit("identify", uid);
+
+
+            
 
 
             socket.on("timeStampChange", timeStamp => {
