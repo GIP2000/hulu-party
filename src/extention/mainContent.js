@@ -75,8 +75,7 @@ const main = () => {
                 console.log("I ran"); 
                 console.log(val); 
 
-                if (val)
-                    setTimeStamp(0,videoPlayer);
+                setTimeStamp(0,videoPlayer);
                
 
             });
