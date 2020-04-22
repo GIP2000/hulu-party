@@ -40,14 +40,15 @@ nsp.on("connection", (socket) => {
         const rooms = io.nsps["/hulu-party"].adapter.rooms[uid];
         socket.join(uid);
         // console.log(io.sockets.connected[Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)]);
-        console.log(rooms); 
-        console.log("identify");
-        if (rooms != undefined) {
-            console.log("1");
-            // io.sockets.connected[Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)].emit("timeStampChange",0); 
-            // io.to(Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)).emit("timeStampChange",0);
-            socket.to(uid).emit("requestTimeStamp", true);
-        } 
+        // console.log(rooms); 
+        // console.log("identify");
+        // if (rooms != undefined) {
+        //     console.log("1");
+        //     // io.sockets.connected[Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)].emit("timeStampChange",0); 
+        //     // io.to(Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)).emit("timeStampChange",0);
+        //     socket.to(uid).emit("requestTimeStamp", true);
+        // } 
+        socket.to(uid).emit("backFive",true); 
 
        
     });
@@ -66,6 +67,7 @@ nsp.on("connection", (socket) => {
 
 
 
-http.listen(3000, () => {
-    console.log("listening on port 3000");
+http.listen(process.env.PORT == undefined ? 3000:process.env.PORT, () => {
+    
+    console.log(`listening on port ${process.env.PORT == undefined ? 3000:process.env.PORT}`);
 });

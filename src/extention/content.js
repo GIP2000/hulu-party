@@ -6940,6 +6940,7 @@ module.exports = yeast;
 const io = require("socket.io-client");
 
 let moving = false;
+let movingG = false;
 
 
 const initalSeekHandler = () => {
@@ -6955,8 +6956,9 @@ const initalSeekHandler = () => {
     }
 };
 
-const setTimeStamp = (timeStamp, videoPlayer,modifier = true) => {
+const setTimeStamp = (timeStamp, videoPlayer, modifier = true) => {
     moving = modifier;
+    movingG = modifier;
     const fastForwardButton = document.querySelector("#dash-player-container > div > div:nth-child(11) > div > div.controls-wrap > div.controls > div.controls__menus > div.controls__menus-center > div.controls__fastforward-button.keep-mouse-active");
     const rewindButton = document.querySelector("#dash-player-container > div > div:nth-child(11) > div > div.controls-wrap > div.controls > div.controls__menus > div.controls__menus-center > div.controls__rewind-button.keep-mouse-active");
     const button = videoPlayer.currentTime > timeStamp ? rewindButton : fastForwardButton;
@@ -6971,7 +6973,7 @@ const setTimeStamp = (timeStamp, videoPlayer,modifier = true) => {
     }
 
     if (videoPlayer.currentTime != timeStamp) videoPlayer.currentTime = timeStamp;
-    moving = false;
+    movingG = false;
 
 
 
@@ -7010,27 +7012,38 @@ const main = () => {
             if (uid === undefined) return chrome.storage.local.clear(makeParty);
             const socket = io("https://dry-brook-72799.herokuapp.com/hulu-party");
 
-            socket.on("requestTimeStamp", val => {
-                console.log("I ran"); 
-                console.log(val); 
-
-                setTimeStamp(0,videoPlayer);
-               
-
-            });
 
             socket.emit("identify", uid);
 
 
-            
-
-
             socket.on("timeStampChange", timeStamp => {
-                playOrPause(true, videoPlayer, playButton);
-                setTimeStamp(timeStamp, videoPlayer,false);
+                console.log("time stamp change");
+                console.log(videoPlayer.currentTime);
+                console.log(videoPlayer.readyState);
+                if (videoPlayer.readyState == 4) {
+                    playOrPause(true, videoPlayer, playButton);
+                    setTimeStamp(timeStamp, videoPlayer);
+                } else {
+
+                    const whenReady = (e) => {
+                        playOrPause(true, videoPlayer, playButton);
+                        setTimeStamp(timeStamp, videoPlayer);
+                        videoPlayer.removeEventListener("canplay", whenReady);
+                    }
+
+                    videoPlayer.addEventListener("canplay", whenReady);
+                }
             });
 
-            
+
+            socket.on("backFive", val => {
+                console.log("back 5 ran");
+
+                playOrPause(true, videoPlayer, playButton);
+                setTimeStamp(videoPlayer.currentTime - 5, videoPlayer);
+            })
+
+
 
             socket.on("paused", (paused) => {
                 playOrPause(paused, videoPlayer, playButton)
@@ -7042,8 +7055,22 @@ const main = () => {
                 socket.emit("paused", false);
             });
 
-            
-            videoPlayer.addEventListener("seeked", e => { if (!moving) playOrPause(true, videoPlayer, playButton); return socket.emit("timeStampChange", videoPlayer.currentTime) });
+
+            videoPlayer.addEventListener("seeked", e => {
+                if (!moving) {
+                    playOrPause(true, videoPlayer, playButton);
+                    return socket.emit("timeStampChange", videoPlayer.currentTime)
+                }
+
+                if(moving != movingG){
+                    movingG = false; 
+                    moving = false; 
+                }
+
+            });
+
+
+            videoPlayer.addEventListener("waiting", e => console.log("waiting"));
 
         });
     }
@@ -7069,7 +7096,9 @@ const makeParty = () => {
 }
 
 
-window.onload = function () {
+
+
+const onLoadFunc = () => {
 
     console.log("running");
 
@@ -7091,6 +7120,11 @@ window.onload = function () {
 
 
 
+    } else if (currentUrl.indexOf("hulu.com") != -1 && currentUrl.indexOf("=https://www.hulu.com") == -1) {
+        console.log("ran");
+        makeParty();
+
+
     } else {
         const uid = currentUrl.substring(currentUrl.indexOf("joinParty/") + "joinParty/".length, currentUrl.indexOf("?url"));
         chrome.storage.local.set({ uid: uid }, () => {
@@ -7108,6 +7142,8 @@ window.onload = function () {
 
 
 }
+
+window.onload = onLoadFunc;
 },{"socket.io-client":30}],47:[function(require,module,exports){
 'use strict'
 

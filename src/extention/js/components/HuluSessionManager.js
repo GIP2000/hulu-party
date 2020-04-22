@@ -1,7 +1,7 @@
 const React = require('react');
 const createReactClass = require('create-react-class');
 const axios = require("axios");
-
+const Button = require("react-bootstrap").Button; 
 
 
 module.exports = createReactClass({
@@ -15,7 +15,6 @@ module.exports = createReactClass({
             console.log(uid); 
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, {uid}, function(response) {
-                    console.log("done");
                 });
               });
 
@@ -28,7 +27,7 @@ module.exports = createReactClass({
         console.log(this.props.tabs);
         
 
-        return<div><button onClick = {this.handleClick}>Press me to start a party</button></div>
+        return<div><Button variant="outline-success" onClick = {this.handleClick}>Begin Gathering</Button></div>
 
 
     }

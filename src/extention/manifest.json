@@ -5,15 +5,17 @@
     "incognito": "split",
     "manifest_version": 2,
     "permissions": [
-        "tabs","storage","activeTab"
+        "tabs","storage","activeTab","webNavigation"
     ],
-    "background": "background.html",
+    "background": {
+        "scripts":["background.js"]
+    },
     "browser_action": {
         "title": "Your Browser Action Name",
         "default_popup": "popup.html"
     },
     "content_scripts": [{
-        "matches" : ["*://*.hulu.com/watch/*","*://*.dry-brook-72799.herokuapp.com/joinParty/*"],
+        "matches" : ["*://*.hulu.com/*","*://*.dry-brook-72799.herokuapp.com/joinParty/*"],
         "css": ["style.css"],
         "js": ["content.js"]
         
