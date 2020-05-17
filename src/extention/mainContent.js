@@ -71,10 +71,10 @@ const main = () => {
         chrome.storage.local.get("uid", val => {
             const uid = val.uid;
             if (uid === undefined) return chrome.storage.local.clear(makeParty);
-            const socket = io("https://dry-brook-72799.herokuapp.com/hulu-party");
+            const socket = io("https://dry-brook-72799.herokuapp.com/hulu-party",{query:`uid=${uid}`});
 
 
-            socket.emit("identify", uid);
+            // socket.emit("identify", uid);
 
 
             socket.on("timeStampChange", timeStamp => {
@@ -103,8 +103,6 @@ const main = () => {
                 playOrPause(true, videoPlayer, playButton);
                 setTimeStamp(videoPlayer.currentTime - 5, videoPlayer);
             })
-
-
 
             socket.on("paused", (paused) => {
                 playOrPause(paused, videoPlayer, playButton)

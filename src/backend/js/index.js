@@ -33,25 +33,20 @@ app.get("/joinParty/:uid", (req, res) => {
 const nsp = io.of('/hulu-party');
 
 nsp.on("connection", (socket) => {
-    socket.on("identify", (uid, callback) => {
-        //add a force pause and chose someone to send the timestmp for this boi also this is broken now fix this 
 
-        
-        const rooms = io.nsps["/hulu-party"].adapter.rooms[uid];
-        socket.join(uid);
-        // console.log(io.sockets.connected[Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)]);
-        // console.log(rooms); 
-        // console.log("identify");
-        // if (rooms != undefined) {
-        //     console.log("1");
-        //     // io.sockets.connected[Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)].emit("timeStampChange",0); 
-        //     // io.to(Object.keys(rooms.sockets)[0].substring(Object.keys(rooms.sockets)[0].indexOf("/hulu-party#")+"/hulu-party#".length)).emit("timeStampChange",0);
-        //     socket.to(uid).emit("requestTimeStamp", true);
-        // } 
-        socket.to(uid).emit("backFive",true); 
+    console.log(socket.handshake.uid);
+    let uid = socket.handshake.query.uid; 
+    socket.join(uid); 
+    socket.to(uid).emit("backFive",true); 
+    
+    // socket.on("identify", (uid, callback) => {
+    //     //add a force pause and chose someone to send the timestmp for this boi also this is broken now fix this  
+    //     const rooms = io.nsps["/hulu-party"].adapter.rooms[uid];
+    //     socket.join(uid);
+    //     socket.to(uid).emit("backFive",true); 
 
        
-    });
+    // });
 
     socket.on("paused", paused => {
         const room = Object.keys(socket.rooms)[1];
